@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>How to create a SSL profile when you don't know the key passphrase &#8211; Costin's place</title>
+    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+    <link rel="dns-prefetch" href="//cdn.mathjax.org">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Yet another network guy with a blog on the internet">
+    <meta name="robots" content="all">
+    <meta name="author" content="Costin Stefan">
+    
+    <meta name="keywords" content="">
+    <link rel="canonical" href="https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Costin's place" href="/feed.xml" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/pixyll.css?202009161446" type="text/css">
+
+    <!-- Fonts -->
+    
+    <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:900,300&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    
+    
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    
+
+    <!-- MathJax -->
+    
+
+    <!-- Verifications -->
+    
+    
+
+    <!-- Open Graph -->
+    <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How to create a SSL profile when you don't know the key passphrase">
+    <meta property="og:description" content="Yet another network guy with a blog on the internet">
+    <meta property="og:url" content="https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/">
+    <meta property="og:site_name" content="Costin's place">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="@costin_cz" />
+        <meta name="twitter:creator" content="@costin_cz" />
+    
+    <meta name="twitter:title" content="How to create a SSL profile when you don't know the key passphrase" />
+    <meta name="twitter:description" content="Yet another network guy with a blog on the internet" />
+    <meta name="twitter:url" content="https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/" />
+    
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/icons/favicon-32x32.png" sizes="32x32">
+
+    
+    <script type="text/javascript">
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+       ga('create', 'UA-5736067-3', 'auto');
+       ga('send', 'pageview');
+    </script>
+    
+
+
+  <!-- Begin Jekyll SEO tag v2.3.0 -->
+<meta property="og:title" content="Installing Jekyll SEO Tag" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content." />
+<meta property="og:description" content="A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content." />
+<link rel="canonical" href="https://costinstefan.eu" />
+<meta property="og:url" content="https://costinstefan.eu" />
+<meta property="og:site_name" content="Costin Stefan's Blog" />
+<script type="application/ld+json">
+{"name":null,"description":"A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content.","author":null,"@type":"WebPage","url":"http://jekyll.github.io/jekyll-seo-tag/installation/","image":null,"publisher":null,"headline":"Installing Jekyll SEO Tag","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body class="site">
+  
+	
+
+  <div class="site-wrap">
+    <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+    <a href="/" style="font-size:32px">C<i class="dot-head">.</i>STIN</a>
+      <nav class="site-nav">
+        
+
+    
+    
+    
+
+    
+        <a href="/about/">About</a>
+    
+    
+    
+
+    
+    
+        <a href="/contact/">Say Hello</a>
+    
+    
+
+    
+    
+    
+        <a href="/cv/">CV</a>
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+
+      </nav>
+      <div class="clearfix"></div>
+      
+        <div class="social-icons">
+  <div class="social-icons-right">
+    
+      <a class="fa fa-github" href="https://github.com/caustee"></a>
+    
+    
+    
+    <a class="fa fa-rss" href="/feed.xml"></a>
+    
+      <a class="fa fa-twitter" href=></a>
+    
+    
+    
+    
+    
+      <a class="fa fa-envelope" href="mailto:site@costinstefan.eu"></a>
+    
+    
+      <a class="fa fa-linkedin" href="https://www.linkedin.com/in/costinstefan"></a>
+    
+    
+    
+    
+    
+  </div>
+  <div class="right">
+    
+    
+    
+  </div>
+</div>
+<div class="clearfix"></div>
+
+      
+    </div>
+  </div>
+</header>
+
+
+    <div class="post p2 p-responsive wrap" role="main">
+      <div class="measure">
+        
+
+
+<div class="post-header mb2">
+  <h1>How to create a SSL profile when you don't know the key passphrase</h1>
+  <span class="post-meta">Feb 24, 2020</span><br>
+  
+  <span class="post-meta small">
+  
+    1 min. read
+  
+  </span>
+</div>
+
+<article class="post-content">
+  <p>On F5 BigIP LTM you can create a SSL profile even if you don’t know the private key passphrase</p>
+
+<p>This workaround can be applied only if you’ve used the private key on the same F5 BigIP node already. In my case, I had to reuse the same cert+key from a server-ssl profile on a client-ssl profile.
+And because business was in a hurry and they didn’t have the private key anymore, I had to find alternative ways of making it work.</p>
+
+<p>This can be achieavable by copying the config snippet from <code class="language-plaintext highlighter-rouge">bigip.conf</code>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ltm profile server-ssl /Common/&lt;name&gt; {
+    app-service none
+    ca-file /Common/XXXXXXcertXXXXX.crt
+    cert /Common/XXXXXXcertXXXXX.crt
+    cert-key-chain {
+        XXXXXXkeyXXXXX_privkey {
+            cert /Common/XXXXXXcertXXXXX.crt
+            key /Common/XXXXXXkeyXXXXX_privkey.key
+            passphrase &lt;random hash value&gt;
+        }
+    }
+    chain none
+    defaults-from /Common/serverssl
+    inherit-certkeychain false
+    key /Common/XXXXXXkeyXXXXX_privkey.key
+    passphrase &lt;different hash value&gt;
+    peer-cert-mode require
+}
+</code></pre></div></div>
+<p>And re-added in <code class="language-plaintext highlighter-rouge">bigip.conf</code> as a client-ssl profile.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ltm profile client-ssl /Common/&lt;name&gt; {
+    app-service none
+    ca-file /Common/XXXXXXcertXXXXX.crt
+    cert /Common/XXXXXXcertXXXXX.crt
+    cert-key-chain {
+        XXXXXXkeyXXXXX_privkey {
+            cert /Common/XXXXXXcertXXXXX.crt
+            key /Common/XXXXXXkeyXXXXX_privkey.key
+            passphrase &lt;random hash value&gt;
+        }
+    }
+    chain none
+    defaults-from /Common/clientssl
+    inherit-certkeychain false
+    key /Common/XXXXXXkeyXXXXX_privkey.key
+    passphrase &lt;different hash value&gt;
+    peer-cert-mode require
+}
+</code></pre></div></div>
+
+<p>then verify  the config: <code class="language-plaintext highlighter-rouge">tmsh load sys config verify</code>. If you don’t get errors just drop the <code class="language-plaintext highlighter-rouge">verify</code> part in order to load the new config: <code class="language-plaintext highlighter-rouge">tmsh load sys config</code>
+These commands work only from linux shell, if you’re already in tmsh  just ignore the tmsh part of the command.</p>
+
+<p>And that’s it. Make sure to have the same passphrase and to do this on the Standby node. If everything is ok and you see the change in the config, just sync it to the Active peer node.
+I’ve tried to add the lines to a new file and just merge the config but it didn’t work as it couldn’t get the passphrase to read the key. This was the only option I could find.
+Good luck!</p>
+
+
+</article>
+
+<small>
+
+  <div class="share-page">
+  If you find this page interesting, feel free to share it:
+
+  <div class="share-links">
+    
+
+    
+      <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?text=How to create a SSL profile when you don't know the key passphrase&url=https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/" rel="nofollow" target="_blank" title="Share on Twitter"></a>
+    
+
+    
+      <a class="fa fa-linkedin" href="http://www.linkedin.com/shareArticle?url=https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/&title=How to create a SSL profile when you don't know the key passphrase" rel="nofollow" target="_blank" title="Share on LinkedIn"></a>
+    
+  </div>
+</div>
+
+
+</small>
+
+
+  <div class="py2 post-footer">
+<p>Costin Stefan</p>
+</div>
+
+
+
+<div id="latest-posts" class="row">
+
+
+
+        <div class="col-12 col-md-6 mb-md-0 mb-3">
+            <a href="https://costinstefan.eu/how-to-update-ntp-servers-on-hp-3par-7200c/">
+                <img src="/" alt="How to change NTP server on HP 3PAR 7200c"
+                     class="img-fluid">
+        </div>
+
+
+
+
+
+        <div class="col-12 col-md-6 mb-md-0 mb-3">
+            <a href="https://costinstefan.eu/how-to-bypass-chrome-error/">
+                <img src="/" alt="How to bypass Chrome error "Your connection is not private""
+                     class="img-fluid">
+        </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="center">
+  <div class="measure">
+    <small>
+     2020&nbsp;&nbsp; This website belongs to me. I may not be always right, but I have opinions and Internet access and I'm not afraid to use them! <br>
+      Theme crafted with &lt;3 by <a href="http://johnotander.com">John Otander</a>.
+    </small>
+  </div>
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="msapplication-config" content="/lib/favicon/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+<meta name="format-detection" content="telephone=no">
+
+<title>Energy consumption calculator | kWh calculator</title>
+<meta content="Energy consumption calculator. kWh calculator." name="description">
+<style>
+	.calc2 input[type=number], .calc2 input[type=text] { width:170px }
+</style>
+
+</head>
+<body>
+<div id="lcol">
+<div id="doc">
+
+<h1>Energy Consumption Calculator</h1>
+<p>Energy consumption calculator. kWh calculator.</p>
+<form name="calcform" autocomplete="off">
+<table class="calc2">
+<tr>
+<td>Typical appliance:</td>
+<td colspan="2">
+<select name="Select4" onchange="OnSetPower()" autofocus>
+<option>-- select --</option>
+<option>Air conditioner</option>
+<option>Clothes dryer</option>
+<option>Clothes iron</option>
+<option>Dishwasher</option>
+<option>Electric kettle</option>
+<option>Fan</option>
+<option>Heater</option>
+<option>Microwave oven</option>
+<option>Desktop computer</option>
+<option>Laptop computer</option>
+<option>Refrigerator</option>
+<option>Stereo receiver</option>
+<option>Television</option>
+<option>Toaster oven</option>
+<option>Vacuum cleaner</option>
+<option>Washing machine</option>
+<option>Water heater</option>
+</select></td>
+</tr>
+<tr>
+<td>Power consumption:</td>
+<td class="math"><input name="Text1" type="number" step="any" min="0" class="intext"></td>
+<td><select name="Select2">
+<option selected="selected">watts (W)</option>
+<option>kilowatts (kW)</option>
+</select></td>
+</tr>
+<tr>
+<td>Hours of use per day:</td>
+<td class="math"><input name="Text2" type="number" step="any" min="0" max="24" class="intext"></td>
+<td class="mathsymbol">h/day</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td colspan="2"><input onclick="OnEnergyCalc()" type="button" value="Calculate" class="btn"> <input type="reset" value="Reset" class="btn"></td>
+</tr>
+<tr>
+<td>Energy consumed per day:</td>
+<td class="math"><input name="Text8" type="text" class="outtext" readonly></td>
+<td class="mathsymbol">kWh/day</td>
+</tr>
+<tr>
+<td>Energy consumed per month:</td>
+<td class="math"><input name="Text9" type="text" class="outtext" readonly></td>
+<td class="mathsymbol">kWh/month</td>
+</tr>
+<tr>
+<td>Energy consumed per year:</td>
+<td class="math"><input name="Text10" type="text" class="outtext" readonly></td>
+<td class="mathsymbol">kWh/year</td>
+</tr>
+</table>
+</form>
+<h2>Energy consumption calculation</h2>
+<p>The energy E in kilowatt-hours (kWh) per day is equal to the power P in watts (W) times number of usage hours per day t divided by 1000 watts per kilowatt:</p>
+<p class="math"><em>E</em><sub>(kWh/day)</sub> = <em>P</em><sub>(W)</sub> &times; <em>t</em><sub>(h/day)</sub> / 1000<sub>(W/kW)</sub></p>
+<p>&nbsp;</p>
+<script src="calc2.js"></script>
+<script>
+		function OnSetPower()
+		{
+			look=[600,3000,2400,1600,2000,70,2000,800,100,50,200,200,70,1000,1600,2000,4000];
+			i = document.calcform.Select4.selectedIndex;
+			if(i==0) return;
+			document.calcform.Text1.value = look[i-1];
+			document.calcform.Select2.selectedIndex=0;
+		}
+		function OnEnergyCalc()
+		{
+			i2 = document.calcform.Select2.selectedIndex;
+			p = document.calcform.Text1.value;
+			h = document.calcform.Text2.value;
+			if( p=='' || h=='' ) return;
+			if( i2==0 ) p/=1000;
+			kwh_day   = p*h;
+			kwh_month = kwh_day*30;
+			kwh_year  = kwh_day*365;
+			kwh_day   = roundnum(kwh_day,5);
+			kwh_month = roundnum(kwh_month,5);
+			kwh_year  = roundnum(kwh_year,5);
+			document.calcform.Text8.value  = kwh_day;
+			document.calcform.Text9.value  = kwh_month;
+			document.calcform.Text10.value = kwh_year;
+		}
+	</script>
+
+
+
+
+</body>
+
+</html>

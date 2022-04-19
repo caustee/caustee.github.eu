@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Password recovery procedure on Cisco Catalyst 3500-XL &#8211; Costin's place</title>
+    <link rel="dns-prefetch" href="//maxcdn.bootstrapcdn.com">
+    <link rel="dns-prefetch" href="//cdn.mathjax.org">
+    <link rel="dns-prefetch" href="//cdnjs.cloudflare.com">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Yet another network guy with a blog on the internet">
+    <meta name="robots" content="all">
+    <meta name="author" content="Costin Stefan">
+    
+    <meta name="keywords" content="">
+    <link rel="canonical" href="https://costinstefan.eu/password-recovery-3500xl/">
+    <link rel="alternate" type="application/rss+xml" title="RSS Feed for Costin's place" href="/feed.xml" />
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/pixyll.css?202009161446" type="text/css">
+
+    <!-- Fonts -->
+    
+    <link href='//fonts.googleapis.com/css?family=Merriweather:900,900italic,300,300italic&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Lato:900,300&subset=latin-ext,latin' rel='stylesheet' type='text/css'>
+    
+    
+      <link href="//maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" rel="stylesheet">
+    
+
+    <!-- MathJax -->
+    
+
+    <!-- Verifications -->
+    
+    
+
+    <!-- Open Graph -->
+    <!-- From: https://github.com/mmistakes/hpstr-jekyll-theme/blob/master/_includes/head.html -->
+    <meta property="og:locale" content="en_US">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Password recovery procedure on Cisco Catalyst 3500-XL">
+    <meta property="og:description" content="Yet another network guy with a blog on the internet">
+    <meta property="og:url" content="https://costinstefan.eu/password-recovery-3500xl/">
+    <meta property="og:site_name" content="Costin's place">
+    
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="@costin_cz" />
+        <meta name="twitter:creator" content="@costin_cz" />
+    
+    <meta name="twitter:title" content="Password recovery procedure on Cisco Catalyst 3500-XL" />
+    <meta name="twitter:description" content="Yet another network guy with a blog on the internet" />
+    <meta name="twitter:url" content="https://costinstefan.eu/password-recovery-3500xl/" />
+    
+
+    <!-- Icons -->
+    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-touch-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-touch-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-touch-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-touch-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-touch-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-touch-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon-180x180.png">
+    <link rel="icon" type="image/png" href="/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="/icons/favicon-32x32.png" sizes="32x32">
+
+    
+    <script type="text/javascript">
+       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+       })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+       ga('create', 'UA-5736067-3', 'auto');
+       ga('send', 'pageview');
+    </script>
+    
+
+
+  <!-- Begin Jekyll SEO tag v2.3.0 -->
+<meta property="og:title" content="Installing Jekyll SEO Tag" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content." />
+<meta property="og:description" content="A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content." />
+<link rel="canonical" href="https://costinstefan.eu" />
+<meta property="og:url" content="https://costinstefan.eu" />
+<meta property="og:site_name" content="Costin Stefan's Blog" />
+<script type="application/ld+json">
+{"name":null,"description":"A Jekyll plugin to add metadata tags for search engines and social networks to better index and display your site’s content.","author":null,"@type":"WebPage","url":"http://jekyll.github.io/jekyll-seo-tag/installation/","image":null,"publisher":null,"headline":"Installing Jekyll SEO Tag","dateModified":null,"datePublished":null,"sameAs":null,"mainEntityOfPage":null,"@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body class="site">
+  
+	
+
+  <div class="site-wrap">
+    <header class="site-header px2 px-responsive">
+  <div class="mt2 wrap">
+    <div class="measure">
+    <a href="/" style="font-size:32px">C<i class="dot-head">.</i>STIN</a>
+      <nav class="site-nav">
+        
+
+    
+    
+    
+
+    
+        <a href="/about/">About</a>
+    
+    
+    
+
+    
+    
+        <a href="/contact/">Say Hello</a>
+    
+    
+
+    
+    
+    
+        <a href="/cv/">CV</a>
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+    
+    
+    
+
+
+      </nav>
+      <div class="clearfix"></div>
+      
+        <div class="social-icons">
+  <div class="social-icons-right">
+    
+      <a class="fa fa-github" href="https://github.com/caustee"></a>
+    
+    
+    
+    <a class="fa fa-rss" href="/feed.xml"></a>
+    
+      <a class="fa fa-twitter" href=></a>
+    
+    
+    
+    
+    
+      <a class="fa fa-envelope" href="mailto:site@costinstefan.eu"></a>
+    
+    
+      <a class="fa fa-linkedin" href="https://www.linkedin.com/in/costinstefan"></a>
+    
+    
+    
+    
+    
+  </div>
+  <div class="right">
+    
+    
+    
+  </div>
+</div>
+<div class="clearfix"></div>
+
+      
+    </div>
+  </div>
+</header>
+
+
+    <div class="post p2 p-responsive wrap" role="main">
+      <div class="measure">
+        
+
+
+<div class="post-header mb2">
+  <h1>Password recovery procedure on Cisco Catalyst 3500-XL</h1>
+  <span class="post-meta">Aug 7, 2017</span><br>
+  
+  <span class="post-meta small">
+  
+    3 min. read
+  
+  </span>
+</div>
+
+<article class="post-content">
+  <p>Just got a used Catalyst 3500-XL switch and don’t have credentials? Did you forget your auth credentials or you just want to have fun?</p>
+
+<h5 id="accessing-a-cisco-switch-when-you-dont-have-the-right-credentials-is-hard-but-not-impossible">Accessing a Cisco switch when you don’t have the right credentials is hard but not impossible.</h5>
+<p><em>If you have issues connecting the console cable, try to install the <a href="https://software.cisco.com/portal/psn/download/login.html?login=true&amp;referer=https://software.cisco.com/download/release.html?mdfid=282979369&amp;softwareid=282855122&amp;release=3.1&amp;dwnld=true&amp;dwldImageGuid=1BEFCB8F748762B8CC378ABA82D6E48B040A80BF&amp;atcFlag=N">drivers</a> first.</em></p>
+
+<p>This will work only if you have access to the box itself. If so, you’ll need to connect a rollover cable and follow the instructions:</p>
+
+<p>Now you have to keep the Mode button pressed, while you plug the power cord to start the device.
+You keep the button pressed till Port 1X light will be turned off.
+After you release it, your prompt on the console connection will become <code class="language-plaintext highlighter-rouge">switch:</code>
+Here you have to initialize the flash image, by using the command: <code class="language-plaintext highlighter-rouge">switch flash_init</code></p>
+
+<p>You can browse the <code class="language-plaintext highlighter-rouge">flash:</code> and check for <code class="language-plaintext highlighter-rouge">startup-config</code>, then rename it to something else <code class="language-plaintext highlighter-rouge">switch: rename flash:/config.text flash:/config.text.old</code>.</p>
+
+<p>After that you’ll be able to boot the switch with <code class="language-plaintext highlighter-rouge">boot</code> command. The IOS won’t be able to find the config file and it will default to Setup wizard. Just refuse it politely by typing <code class="language-plaintext highlighter-rouge">no</code> and when the prompt will become <code class="language-plaintext highlighter-rouge">Switch&gt;</code>, type <code class="language-plaintext highlighter-rouge">enable</code>, restore the config file: <code class="language-plaintext highlighter-rouge">Switch#rename flash:/config.text.old flash:/config.text</code></p>
+
+<p>Now you have to load the original config <code class="language-plaintext highlighter-rouge">Switch#copy flash:/config.text flash:/running-config</code> and enter into <code class="language-plaintext highlighter-rouge">configure terminal</code> to change the tricky password.</p>
+
+<p>That’s all! Don’t forget to check config register and try to remember the password  this time :)</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>switch: rename flash:/config.text flash:/config.text.old
+switch: dir flash:
+Directory of flash:/
+
+2    -rwx  1751867   &lt;date&gt;               c3500XL-c3h2s-mz.120-5.WC3b.bin
+3    -rwx  94370     &lt;date&gt;               c3500XL-diag-mz-120-5.WC2a
+4    -rwx  347       &lt;date&gt;               env_vars
+5    -rwx  109       &lt;date&gt;               info
+6    -rwx  25        &lt;date&gt;               snmpengineid
+7    drwx  640       &lt;date&gt;               html
+18   -rwx  109       &lt;date&gt;               info.ver
+19   -rwx  6218      &lt;date&gt;               config.text.old
+21   -rwx  616       &lt;date&gt;               vlan.dat
+
+349696 bytes available (3262976 bytes used)
+switch: boot
+Loading "flash:c3500XL-c3h2s-mz.120-5.WC3b.bin"...############################################
+
+File "flash:c3500XL-c3h2s-mz.120-5.WC3b.bin" uncompressed and installed, entry poin
+executing...
+
+              Restricted Rights Legend
+
+Use, duplication, or disclosure by the Government is
+subject to restrictions as set forth in subparagraph
+(c) of the Commercial Computer Software - Restricted
+Rights clause at FAR sec. 52.227-19 and subparagraph
+(c) (1) (ii) of the Rights in Technical Data and Computer
+Software clause at DFARS sec. 252.227-7013.
+
+           cisco Systems, Inc.
+           170 West Tasman Drive
+           San Jose, California 95134-1706
+
+Cisco Internetwork Operating System Software
+IOS (tm) C3500XL Software (C3500XL-C3H2S-M), Version 12.0(5)WC3b, RELEASE SOFTWARE
+Copyright (c) 1986-2002 by cisco Systems, Inc.
+Compiled Fri 15-Feb-02 10:51 by antonino
+Image text-base: 0x00003000, data-base: 0x00337600
+
+
+Initializing C3500XL flash...
+flashfs[1]: 19 files, 2 directories
+flashfs[1]: 0 orphaned files, 0 orphaned directories
+flashfs[1]: Total bytes: 3612672
+flashfs[1]: Bytes used: 3262976
+flashfs[1]: Bytes available: 349696
+flashfs[1]: flashfs fsck took 4 seconds.
+flashfs[1]: Initialization complete.
+...done Initializing C3500XL flash.
+C3500XL POST: System Board Test: Passed
+C3500XL POST: Daughter Card Test: Passed
+C3500XL POST: CPU Buffer Test: Passed
+C3500XL POST: CPU Notify RAM Test: Passed
+C3500XL POST: CPU Interface Test: Passed
+C3500XL POST: Testing Switch Core: Passed
+C3500XL POST: Testing Buffer Table: Passed
+C3500XL POST: Data Buffer Test: Passed
+C3500XL POST: Configuring Switch Parameters: Passed
+C3500XL POST: Ethernet Controller Test: Passed
+C3500XL POST: MII Test: Passed
+cisco WS-C3524-PWR-XL (PowerPC403) processor (revision 0x01) with 8192K/1024K bytes
+Processor board ID CHK0624W0BZ, with hardware revision 0x00
+Last reset from power-on
+
+Processor is running Enterprise Edition Software
+Cluster command switch capable
+Cluster member switch capable
+24 FastEthernet/IEEE 802.3 interface(s)
+2 Gigabit Ethernet/IEEE 802.3 interface(s)
+
+32K bytes of flash-simulated non-volatile configuration memory.
+...
+C3500XL INIT: Complete
+
+00:00:20: %SYS-5-RESTART: System restarted --
+Cisco Internetwork Operating System Software
+IOS (tm) C3500XL Software (C3500XL-C3H2S-M), Version 12.0(5)WC3b, RELEASE SOFTWARE
+Copyright (c) 1986-2002 by cisco Systems, Inc.
+Compiled Fri 15-Feb-02 10:51 by antonino
+
+         --- System Configuration Dialog ---
+
+At any point you may enter a question mark '?' for help.
+Use ctrl-c to abort configuration dialog at any prompt.
+Default settings are in square brackets '[]'.
+
+Continue with configuration dialog? [yes/no]: no
+Press RETURN to get started.
+
+
+Switch&gt;ena
+Switch#
+Switch#rename flash:config.text.old flash:config.text
+Destination filename [config.text]?
+Switch#copy flash:config.text system:/running-config
+Destination filename [running-config]?
+6218 bytes copied in 2.753 secs (3109 bytes/sec)
+ORIGINAL-NAME#conf t
+ORIGINAL-NAME(conf)# enable secret ANOTHERPASSWORD
+</code></pre></div></div>
+
+</article>
+
+<small>
+
+  <div class="share-page">
+  If you find this page interesting, feel free to share it:
+
+  <div class="share-links">
+    
+
+    
+      <a class="fa fa-twitter" href="https://twitter.com/intent/tweet?text=Password recovery procedure on Cisco Catalyst 3500-XL&url=https://costinstefan.eu/password-recovery-3500xl/" rel="nofollow" target="_blank" title="Share on Twitter"></a>
+    
+
+    
+      <a class="fa fa-linkedin" href="http://www.linkedin.com/shareArticle?url=https://costinstefan.eu/password-recovery-3500xl/&title=Password recovery procedure on Cisco Catalyst 3500-XL" rel="nofollow" target="_blank" title="Share on LinkedIn"></a>
+    
+  </div>
+</div>
+
+
+</small>
+
+
+  <div class="py2 post-footer">
+<p>Costin Stefan</p>
+</div>
+
+
+
+<div id="latest-posts" class="row">
+
+
+
+        <div class="col-12 col-md-6 mb-md-0 mb-3">
+            <a href="https://costinstefan.eu/how-to-update-ntp-servers-on-hp-3par-7200c/">
+                <img src="/" alt="How to change NTP server on HP 3PAR 7200c"
+                     class="img-fluid">
+        </div>
+
+
+
+
+
+        <div class="col-12 col-md-6 mb-md-0 mb-3">
+            <a href="https://costinstefan.eu/how-to-bypass-chrome-error/">
+                <img src="/" alt="How to bypass Chrome error "Your connection is not private""
+                     class="img-fluid">
+        </div>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <footer class="center">
+  <div class="measure">
+    <small>
+     2020&nbsp;&nbsp; This website belongs to me. I may not be always right, but I have opinions and Internet access and I'm not afraid to use them! <br>
+      Theme crafted with &lt;3 by <a href="http://johnotander.com">John Otander</a>.
+    </small>
+  </div>
+</footer>
+
+
+</body>
+</html>

@@ -1,0 +1,845 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Costin's place</title>
+    <description>Yet another network guy with a blog on the internet</description>
+    <link>https://costinstefan.eu/</link>
+    <atom:link href="https://costinstefan.eu/feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>How to change NTP server on HP 3PAR 7200c</title>
+        <description>&lt;p&gt;Recently I had to add more NTP servers to a HP 3PAR 7200c storage. Here’s how I did it:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;3PAR_hostname cli% setnet ntp -add 10.90.221.13
+NTP server successfully updated.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Show current NTP server(s):&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;3PAR_hostname cli% shownet
+IP Address  Netmask/PrefixLen Nodes Active Speed Duplex AutoNeg Status
+10.23.155.8   255.255.255.192    01      1  1000 Full   Yes     Active
+
+Default route :                                     10.23.155.1
+NTP server    :   {} 10.102.102.132 10.102.102.133 10.90.221.13
+DNS server    :                                            None
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Remove one NTP server:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;3PAR_hostname cli% setnet ntp -remove 10.90.221.13
+NTP server successfully updated.
+
+3PAR_hostname cli% shownet
+IP Address  Netmask/PrefixLen Nodes Active Speed Duplex AutoNeg Status
+10.23.155.8   255.255.255.192    01      1  1000 Full   Yes     Active
+
+Default route :                        10.23.155.1
+NTP server    :   {} 10.102.102.132 10.102.102.133
+DNS server    :                               None
+3PAR_hostname cli%
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;#can’t add more than 1 server at a time:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;m4sxhpst1P01 cli% setnet ntp -add 10.90.221.13 10.90.221.29 10.90.221.45
+setnet: Incorrect number of arguments.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And the maximum ammount of severs is 4, in case you were asking:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;3PAR_hostname cli% setnet ntp -add 10.90.221.61
+Cannot configure more than 4 NTP servers.
+3PAR_hostname cli% setnet ntp -remove 10.102.102.132
+NTP server successfully updated.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it! That simple. More info can be found in the original documentation: https://support.hpe.com/hpesc/public/docDisplay?docId=c03583615&amp;amp;docLocale=en_US&lt;/p&gt;
+</description>
+        <pubDate>Wed, 16 Sep 2020 00:00:00 +0200</pubDate>
+        <link>https://costinstefan.eu/how-to-update-ntp-servers-on-hp-3par-7200c/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-update-ntp-servers-on-hp-3par-7200c/</guid>
+      </item>
+    
+      <item>
+        <title>How to bypass Chrome error &quot;Your connection is not private&quot;</title>
+        <description>&lt;p&gt;If you’re an IT professional that has to deal with old systems that have self-signed certificates you most probably had to add exceptions to your browser many times. Maybe even import those self-signed certificates locally.&lt;/p&gt;
+
+&lt;p&gt;Unfortunately when you’re working on a customer’s jump host this is not an option. And starting with more recent version of Chrome this is not possible anymore, you don’t have the option to Add it as an exception.&lt;/p&gt;
+
+&lt;h2 id=&quot;luckily-theres-a-fix&quot;&gt;Luckily there’s a fix&lt;/h2&gt;
+&lt;p&gt;All you have to do is press on &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Advanced&lt;/code&gt; tab and type &lt;strong&gt;thisisunsafe&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;You don’t have to type it in the URL field, just type it in the main window of Chrome. In some older versions of Chrome the safeword was &lt;strong&gt;badidea&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;This, of course, should be done only if you know what you’re doing, but if you reached this website I’m almost sure you do :)&lt;/p&gt;
+
+&lt;p&gt;Thanks @Răzvan for the tip.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 30 Jun 2020 00:00:00 +0200</pubDate>
+        <link>https://costinstefan.eu/how-to-bypass-chrome-error/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-bypass-chrome-error/</guid>
+      </item>
+    
+      <item>
+        <title>How to quickly enable a low-resource webserver</title>
+        <description>&lt;p&gt;Have you ever wanted to just start a Webserver in a second, for a quick and dirty task but didn’t want to install a full LAMP/LEMP stack?
+This is possible with the help of a python module and here it is in action:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;costin@ubuntu:~$ mkdir testare
+costin@ubuntu:~$ cd testare/
+costin@ubuntu:~/testare$ echo MERGE! &amp;gt; index.html
+costin@ubuntu:~/testare$ pushd $PWD; python3 -m http.server; popd
+~/testare ~/testare
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+192.168.1.126 - - [29/Apr/2020 14:16:10] &quot;GET / HTTP/1.1&quot; 200 -
+192.168.1.126 - - [29/Apr/2020 14:16:10] code 404, message File not found
+192.168.1.126 - - [29/Apr/2020 14:16:10] &quot;GET /favicon.ico HTTP/1.1&quot; 404 -
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@ubuntu:~# curl http://192.168.1.94:8000/
+MERGE!
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Oh and this is cross-platform, of course. If you have python installed on a Windows machine.&lt;/p&gt;
+
+&lt;p&gt;Not to mention that this is possible even from low-priviledge user accounts.&lt;/p&gt;
+
+&lt;p&gt;For more details about this module please see &lt;a href=&quot;https://docs.python.org/3/library/http.server.html&quot;&gt;the official documentation&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Wed, 29 Apr 2020 00:00:00 +0200</pubDate>
+        <link>https://costinstefan.eu/how-to-quickly-enable-a-low-resourced-webserver/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-quickly-enable-a-low-resourced-webserver/</guid>
+      </item>
+    
+      <item>
+        <title>How to create a SSL profile when you don't know the key passphrase</title>
+        <description>&lt;p&gt;On F5 BigIP LTM you can create a SSL profile even if you don’t know the private key passphrase&lt;/p&gt;
+
+&lt;p&gt;This workaround can be applied only if you’ve used the private key on the same F5 BigIP node already. In my case, I had to reuse the same cert+key from a server-ssl profile on a client-ssl profile.
+And because business was in a hurry and they didn’t have the private key anymore, I had to find alternative ways of making it work.&lt;/p&gt;
+
+&lt;p&gt;This can be achieavable by copying the config snippet from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bigip.conf&lt;/code&gt;:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ltm profile server-ssl /Common/&amp;lt;name&amp;gt; {
+    app-service none
+    ca-file /Common/XXXXXXcertXXXXX.crt
+    cert /Common/XXXXXXcertXXXXX.crt
+    cert-key-chain {
+        XXXXXXkeyXXXXX_privkey {
+            cert /Common/XXXXXXcertXXXXX.crt
+            key /Common/XXXXXXkeyXXXXX_privkey.key
+            passphrase &amp;lt;random hash value&amp;gt;
+        }
+    }
+    chain none
+    defaults-from /Common/serverssl
+    inherit-certkeychain false
+    key /Common/XXXXXXkeyXXXXX_privkey.key
+    passphrase &amp;lt;different hash value&amp;gt;
+    peer-cert-mode require
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;p&gt;And re-added in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;bigip.conf&lt;/code&gt; as a client-ssl profile.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;ltm profile client-ssl /Common/&amp;lt;name&amp;gt; {
+    app-service none
+    ca-file /Common/XXXXXXcertXXXXX.crt
+    cert /Common/XXXXXXcertXXXXX.crt
+    cert-key-chain {
+        XXXXXXkeyXXXXX_privkey {
+            cert /Common/XXXXXXcertXXXXX.crt
+            key /Common/XXXXXXkeyXXXXX_privkey.key
+            passphrase &amp;lt;random hash value&amp;gt;
+        }
+    }
+    chain none
+    defaults-from /Common/clientssl
+    inherit-certkeychain false
+    key /Common/XXXXXXkeyXXXXX_privkey.key
+    passphrase &amp;lt;different hash value&amp;gt;
+    peer-cert-mode require
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;then verify  the config: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tmsh load sys config verify&lt;/code&gt;. If you don’t get errors just drop the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;verify&lt;/code&gt; part in order to load the new config: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;tmsh load sys config&lt;/code&gt;
+These commands work only from linux shell, if you’re already in tmsh  just ignore the tmsh part of the command.&lt;/p&gt;
+
+&lt;p&gt;And that’s it. Make sure to have the same passphrase and to do this on the Standby node. If everything is ok and you see the change in the config, just sync it to the Active peer node.
+I’ve tried to add the lines to a new file and just merge the config but it didn’t work as it couldn’t get the passphrase to read the key. This was the only option I could find.
+Good luck!&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 24 Feb 2020 00:00:00 +0100</pubDate>
+        <link>https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-create-ssl-profile-with-no-passphrase-on-F5/</guid>
+      </item>
+    
+      <item>
+        <title>How to fix do-agent exited with a return code 100</title>
+        <description>&lt;p&gt;So recently I’ve encountered the error in the subject. This came after 2 major changes (OS upgrade and PHP upgrade). So definitely it had to do with one of them. My money were on the first one.
+I’ve looked around on the internet and the only thing I could see was this old article that had no solution: https://www.digitalocean.com/community/questions/do-agent-exited-with-a-return-code-100&lt;/p&gt;
+
+&lt;p&gt;So I knew I had to take the matters in my own hands. I’ve started by looking at that cron entry that was failing.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;run-parts: /etc/cron.daily/do-agent exited with return code 100&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The cron itself was pretty simple, just a bash script.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:/etc/logrotate.d# cat /etc/cron.daily/do-agent
+#!/bin/sh
+/bin/bash /opt/digitalocean/do-agent/scripts/update.sh &amp;gt;/dev/null 2&amp;gt;&amp;amp;1
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;update.sh&lt;/code&gt; script is also very simple:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:/etc/logrotate.d# cat /opt/digitalocean/do-agent/scripts/update.sh
+#!/bin/bash
+# vim: noexpandtab
+
+main() {
+        # add some jitter to prevent overloading the packaging machines
+        sleep $(( RANDOM % 900 ))
+
+        export DEBIAN_FRONTEND=&quot;noninteractive&quot;
+        if command -v apt-get 2&amp;amp;&amp;gt;/dev/null; then
+                apt-get -qq update -o Dir::Etc::SourceParts=/dev/null -o APT::Get::List-Cleanup=no -o Dir::Etc::SourceList=&quot;sources.list.d/digitalocean-agent.list&quot;
+                apt-get -o Dpkg::Options::=&quot;--force-confdef&quot; -o Dpkg::Options::=&quot;--force-confold&quot; -qq install -y --only-upgrade do-agent
+        elif command -v yum 2&amp;amp;&amp;gt;/dev/null; then
+                yum -q -y --disablerepo=&quot;*&quot; --enablerepo=&quot;digitalocean-agent&quot; makecache
+                yum -q -y update do-agent
+        fi
+}
+
+main
+root@server:/etc/logrotate.d#
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I’ve ran the command manually and after a long (timeout?) period it exited with status code 100. So just like in my emails.&lt;/p&gt;
+
+&lt;p&gt;I went further on with my troubleshooting and added debug to bash and removed the redirect to /dev/null part. And this time I’ve noticed that there was no timeout, but just a random sleep that’s at the beginning of update.sh&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:/etc/apt/sources.list.d# time /bin/bash -x /opt/digitalocean/do-agent/scripts/update.sh
++ main
++ sleep 650
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you don’t want to wait 650 seconds then you can stop and start it again, hoping to get a shorter number, or just comment that part in the script. But I didn’t want to alter the script, just to fix it. So I chose to stop and re-start it till I get a shorter sleep timer.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:/etc/apt/sources.list.d# time /bin/bash -x /opt/digitalocean/do-agent/scripts/update.sh
++ main
++ sleep 812
+^C
+
+real    0m1.218s
+user    0m0.004s
+sys     0m0.000s
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:/etc/apt/sources.list.d# time /bin/bash -x /opt/digitalocean/do-agent/scripts/update.sh
++ main
++ sleep 13
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ command -v apt-get 2
++ apt-get -qq update -o Dir::Etc::SourceParts=/dev/null -o APT::Get::List-Cleanup=no -o Dir::Etc::SourceList=sources.list.d/digitalocean-agent.list
++ apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -qq install -y --only-upgrade do-agent
+Setting up apache2 (2.4.29-1ubuntu4.11) ...
+ERROR: Module reqtimeout does not exist!
+dpkg: error processing package apache2 (--configure):
+ installed apache2 package post-installation script subprocess returned error exit status 1
+Errors were encountered while processing:
+ apache2
+E: Sub-process /usr/bin/dpkg returned an error code (1)
+
+real    0m22.398s
+user    0m8.120s
+sys     0m0.876s
+root@server:/etc/apt/sources.list.d# echo $?
+100
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now I have it :) It seems that the update script fails due to some apache2 module missing. And this is normal, because I don’t have apache on my server.&lt;/p&gt;
+
+&lt;p&gt;So to fix it I just had to remove all apache-related packages from the machine. Which were installed by the latest PHP upgrade. So it wasn’t due to OS upgrade like I first suspected :)&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:~# apt-get purge apache2*
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+Note, selecting 'apache2-ssl-dev' for glob 'apache2*'
+Note, selecting 'apache2.2-common' for glob 'apache2*'
+Note, selecting 'apache2-suexec-pristine' for glob 'apache2*'
+Note, selecting 'apache2-api-20120211' for glob 'apache2*'
+Note, selecting 'apache2-data' for glob 'apache2*'
+Note, selecting 'apache2-api-20120211-openssl1.1' for glob 'apache2*'
+Note, selecting 'apache2-suexec' for glob 'apache2*'
+Note, selecting 'apache2-bin' for glob 'apache2*'
+Note, selecting 'apache2.2-bin' for glob 'apache2*'
+Note, selecting 'apache2-dbg' for glob 'apache2*'
+Note, selecting 'apache2-dev' for glob 'apache2*'
+Note, selecting 'apache2-doc' for glob 'apache2*'
+Note, selecting 'apache2-suexec-custom' for glob 'apache2*'
+Note, selecting 'apache2' for glob 'apache2*'
+Note, selecting 'apache2-utils' for glob 'apache2*'
+Note, selecting 'apache2-mpm-itk' for glob 'apache2*'
+Package 'apache2.2-bin' is not installed, so not removed
+Package 'apache2.2-common' is not installed, so not removed
+Note, selecting 'apache2-bin' instead of 'apache2-api-20120211'
+Note, selecting 'apache2-bin' instead of 'apache2-api-20120211-openssl1.1'
+Package 'apache2-mpm-itk' is not installed, so not removed
+Package 'apache2-dbg' is not installed, so not removed
+Package 'apache2-dev' is not installed, so not removed
+Package 'apache2-doc' is not installed, so not removed
+Package 'apache2-ssl-dev' is not installed, so not removed
+Package 'apache2-suexec-custom' is not installed, so not removed
+Package 'apache2-suexec-pristine' is not installed, so not removed
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This time the script ended successfuly with status code 0.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;root@server:~# time /bin/bash -x /opt/digitalocean/do-agent/scripts/update.sh
++ main
++ sleep 61
++ export DEBIAN_FRONTEND=noninteractive
++ DEBIAN_FRONTEND=noninteractive
++ command -v apt-get 2
++ apt-get -qq update -o Dir::Etc::SourceParts=/dev/null -o APT::Get::List-Cleanup=no -o Dir::Etc::SourceList=sources.list.d/digitalocean-agent.list
++ apt-get -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold -qq install -y --only-upgrade do-agent
+
+real    1m6.107s
+user    0m4.184s
+sys     0m0.552s
+root@server:~# echo $?
+0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Your error might be related to something else, but anyhow, in case you run into this sort of issues I hope this helps you speed-up the troubleshooting phase.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 16 Feb 2020 00:00:00 +0100</pubDate>
+        <link>https://costinstefan.eu/how-to-fix-do-agent-exited/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-fix-do-agent-exited/</guid>
+      </item>
+    
+      <item>
+        <title>How to CTRL+ALT+DEL in RDP</title>
+        <description>&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ctrl+alt+end&lt;/code&gt;&lt;/p&gt;
+</description>
+        <pubDate>Tue, 22 May 2018 00:00:00 +0200</pubDate>
+        <link>https://costinstefan.eu/how-to-ctr-alt-del-in-rdp/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-ctr-alt-del-in-rdp/</guid>
+      </item>
+    
+      <item>
+        <title>How to fix Microsoft Lync/Outlook has stopped working</title>
+        <description>&lt;p&gt;&lt;img src=&quot;/images/outlook-error.jpeg&quot; alt=&quot;lync-error&quot; title=&quot;Lync Error&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Recently I had this issue that ate a big part of my day. Here’s how I fixed it.&lt;/p&gt;
+
+&lt;h4 id=&quot;firstly-some-background-info&quot;&gt;Firstly, some background info&lt;/h4&gt;
+&lt;p&gt;I’m using a Win 10 (Version 10.0.14393) OS with Office 2013 [15.0.4569.1503]. The previous day I’ve been prompted to restart my laptop to complete the new updates. I’ve left in a hurry and just closed the lid. The laptop didn’t close and I had to use the power button to stop it. I knew I was in trouble at this point, but had to attend a meeting and didn’t have time to wait for the updates.&lt;/p&gt;
+
+&lt;p&gt;The following morning Microsoft Outlook greeted me with the message in the picture. And so did Skype for Business.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Faulting application name: OUTLOOK.EXE, version: 15.0.5023.1000, time stamp: 0x5aa78315
+Faulting module name: MSVCR100.dll, version: 10.0.40219.325, time stamp: 0x4df2be1e
+Exception code: 0xc0000005
+Fault offset: 0x000173a5
+Faulting process id: 0x2f94
+Faulting application start time: 0x01d3ece4824e69d2
+Faulting application path: C:\Program Files (x86)\Microsoft Office\Office15\OUTLOOK.EXE
+Faulting module path: C:\windows\SYSTEM32\MSVCR100.dll
+Report Id: 2ed214cc-58d8-11e8-822d-b4b676a83afd
+Faulting package full name: 
+Faulting package-relative application ID: 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Faulting application name: lync.exe, version: 15.0.5023.1000, time stamp: 0x5aa7802d
+Faulting module name: MSVCR100.dll, version: 10.0.40219.325, time stamp: 0x4df2be1e
+Exception code: 0xc0000005
+Fault offset: 0x000173a5
+Faulting process id: 0x1c78
+Faulting application start time: 0x01d3ece617a52df9
+Faulting application path: C:\Program Files (x86)\Microsoft Office\Office15\lync.exe
+Faulting module path: C:\windows\SYSTEM32\MSVCR100.dll
+Report Id: 9a24552e-58d9-11e8-822e-b4b676a83afd
+Faulting package full name: 
+Faulting package-relative application ID: 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I’ve tried everything I could think of (check for updates on the system to continue what was left; remove the updates one by one; update again; do a system restore with a day before; do another system restore with 5 days earlier; reinstalled the office suite. &lt;strong&gt;NOTHING&lt;/strong&gt;. Same error.&lt;/p&gt;
+
+&lt;p&gt;After a system restore, the faulty module changed, but the situation was the same. Event viewer displayed the following errors:&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Faulting application name: OUTLOOK.EXE, version: 15.0.4569.1503, time stamp: 0x52b0b282
+Faulting module name: KERNELBASE.dll, version: 10.0.14393.2189, time stamp: 0x5abda7d6
+Exception code: 0x80000003
+Fault offset: 0x00154922
+Faulting process id: 0x11ec
+Faulting application start time: 0x01d3ed163b7e5cfc
+Faulting application path: C:\PROGRA~2\MICROS~1\Office15\OUTLOOK.EXE
+Faulting module path: C:\windows\System32\KERNELBASE.dll
+Report Id: b3cacfd0-ea82-41d0-83b2-1955e51d6a53
+Faulting package full name: 
+Faulting package-relative application ID: 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I’ve also ran a system scan to no avail.&lt;/p&gt;
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;C:\windows\system32&amp;gt;sfc /scannow
+
+Beginning system scan.  This process will take some time.
+
+Beginning verification phase of system scan.
+Verification 100% complete.
+
+Windows Resource Protection found corrupt files and successfully repaired
+them. Details are included in the CBS.Log windir\Logs\CBS\CBS.log. For
+example C:\Windows\Logs\CBS\CBS.log. Note that logging is currently not
+supported in offline servicing scenarios.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Microsoft Community forum didn’t help much. But I’ve learned that you can start Outlook in safe mode (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;outlook /safe&lt;/code&gt;). And even though it didn’t connect to the server in the beginning, it did ran without the error. During one of the reboots of Outlook I’ve been prompted to create a new account (in safe mode), and when I recreated my profile, BANG, it worked! Now the problem that I had was that Lync was still not working. Same error message when starting.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-fix&quot;&gt;THE FIX&lt;/h2&gt;
+
+&lt;p&gt;The fix was to simply rename/delete the .ost file for my profile (you can find it in C:\Users\/&lt;you&gt;\AppData\Local\Microsoft\Outlook\/&amp;lt;youremailaddress@domain&amp;gt;.ost&lt;/you&gt;&lt;/p&gt;
+
+&lt;p&gt;That was it. I hope this helps in case you run into this.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 15 May 2018 00:00:00 +0200</pubDate>
+        <link>https://costinstefan.eu/how-to-fix-outlook-has-stopped-working/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/how-to-fix-outlook-has-stopped-working/</guid>
+      </item>
+    
+      <item>
+        <title>Networking training materials</title>
+        <description>&lt;p&gt;I’ve stumbled upon this great list of materials you can use to get started on IT, and Networking in particular. I have to admit that some are new for me, even after being in this field for over 12 years.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;2018-01-03 note, I’ve update the list with more resources&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/ITCareerQuestions/wiki/index&quot;&gt;/r/ITCareerQuestions Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/cscareerquestions/wiki/index&quot;&gt;/r/CSCareerQuestions Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/sysadmin/wiki/index&quot;&gt;/r/Sysadmin Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/networking/wiki/index&quot;&gt;/r/Networking Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/netsec/wiki/index&quot;&gt;/r/NetSec Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.reddit.com/r/netsecstudents/wiki/index&quot;&gt;/r/NetSecStudents Wiki&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Certifications&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://certification.comptia.org/docs/default-source/downloadablefiles/it-certification-roadmap.pdf&quot;&gt;IT Certification Road Map&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.cisco.com/c/en/us/training-events/training-certifications/certifications.html&quot;&gt;Cisco Training &amp;amp; certification Info Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.juniper.net/us/en/training/certification/&quot;&gt;Juniper Networks Certification Programs&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.microsoft.com/en-us/learning/certification-overview.aspx&quot;&gt;Microsoft Learning Info Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.redhat.com/en/services/all-certifications-exams&quot;&gt;Red Hat Certification Info Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://mylearn.vmware.com/portals/certification/&quot;&gt;VMware Certification Info Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Microsoft&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://openedx.microsoft.com/&quot;&gt;Microsoft Learning Portal - Powered by EdX&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://mva.microsoft.com/&quot;&gt;Microsoft Virtual Academy&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://msdn.microsoft.com/en-us/evalcenter.aspx&quot;&gt;Microsoft MSDN Product Evaluation Center – Free Downloads&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.microsoft.com/en-us/evalcenter/&quot;&gt;Microsoft TechNet Product Evaluation Center – More Free Downloads&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://azure.microsoft.com/en-us/pricing/free-trial/&quot;&gt;Microsoft Azure Cloud Services Free Trial Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.microsoft.com/en-us/learning/training.aspx&quot;&gt;Microsoft Training Info Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://myignite.microsoft.com/#/videos&quot;&gt;Microsoft Ignite Training Convention Video Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://channel9.msdn.com/&quot;&gt;Microsoft MSDN Video Training Portal&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Cisco / Networking&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://lagunita.stanford.edu/courses/Engineering/Networking-SP/SelfPaced/about&quot;&gt;Stanford University Free Intro to Networking Online Course&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://learningnetwork.cisco.com/thread/15662&quot;&gt;Cisco Learning Center - How to Study for CCNA for Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.professormesser.com/network-plus/n10-006/n10-006-course-index/&quot;&gt;Professor Messer’s CompTIA Network+ Training Videos&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.cybrary.it/course/cisco-ccna/&quot;&gt;Cybrary Free CCNA Training Videos&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://virl.cisco.com/&quot;&gt;Cisco VIRL - Virtual Router &amp;amp; Firewall Training Tool&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://gns3vault.com/&quot;&gt;GNS3 Vault - Free Practice &amp;amp; Training Labs for Cisco Equipment&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.ciscolive.com/online&quot;&gt;Cisco Live Training Convention Video Portal - Free Registration Required&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.cisco.com/c/en/us/solutions/enterprise/design-zone/index.html&quot;&gt;Cisco Design Zone - Best Practices&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://packetbomb.com/&quot;&gt;PacketBomb - WireShark Training Center&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.netcraftsmen.com/resources/blog/&quot;&gt;NetCraftsmen - Network Consultants Blog&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://packetpushers.net/&quot;&gt;PacketPushers News &amp;amp; Podcasts&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://blog.ipspace.net/&quot;&gt;IOSHints - Ivan Pepelnjak’s Blog/site&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://cumulusnetworks.com/technical-videos/&quot;&gt;Cumulus Networks SDN Technical Videos&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.sdxcentral.com/&quot;&gt;SDX Central - SDN Resources&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Information/Computer/Network Security&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.sans.org/reading-room&quot;&gt;SANS Reading Room&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.giac.org/certifications/categories&quot;&gt;SANS Certifications&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/user/BlackHatOfficialYT&quot;&gt;BlackHat Conferences @ YouTube&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/user/DEFCONConference&quot;&gt;DEFCON Conferences @ YouTube&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/user/RSAConference&quot;&gt;RSA Conference @ YouTube&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/channel/UCrmnnE3yzpAyAuX_hRqyLdg&quot;&gt;Carnegie Mellon SoftEng Institute @ YouTube&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://pwning.net/&quot;&gt;CMU’s Plaid Parliament of Pwning Competitive Hacking Team Blog&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.cybrary.it/&quot;&gt;Cybrary - Open Source Security Learning&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://krebsonsecurity.com/&quot;&gt;Krebs on Security blog&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://googleonlinesecurity.blogspot.com/&quot;&gt;Google’s Security Blog&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.us-cert.gov/&quot;&gt;US CERT - Computer Emergency Response Team blog&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.isc2.org/cissp/default.aspx&quot;&gt;ISC^2 - CISSP - Certified Information Systems Security Professional&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;Linux Resources&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://training.linuxfoundation.org/linux-courses/system-administration-training/introduction-to-linux&quot;&gt;Linux Foundation - Intro to Linux for Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://training.linuxfoundation.org/content/e-learning-courses&quot;&gt;Linux Foundation - Online Course Catalog - some free some paid&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.digitalocean.com/community&quot;&gt;DigitalOcean Linux Tutorials&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://training.docker.com/category/self-paced-online&quot;&gt;Docker Self-Paced Training&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.usenix.org/conference/srecon14/program&quot;&gt;USENIX Site Reliability Enginering Convention 2014 Presentations - Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.usenix.org/conference/srecon15/program&quot;&gt;USENIX Site Reliability Enginering Convention 2015 Presentations - Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://usenix.org/conference/lisa14/conference-program&quot;&gt;USENIX Large Installation System Administration Conference 2014 Presentations - Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://usenix.org/conference/lisa15/conference-program&quot;&gt;USENIX Large Installation System Administration Conference 2015 Presentations - Free&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://info.puppetlabs.com/puppetconf-2014-videos-and-presentations.html&quot;&gt;PuppetConf Convention Videos 2014 - Free Registration Required&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://info.puppetlabs.com/PuppetConf-2015-Videos-and-Presentations.html&quot;&gt;PuppetConf Convention Videos 2015 - Free Registration Required&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/playlist?list=PL11cZfNdwNyO9CpTWH2qjYfzysEtpfOCd&quot;&gt;ChefConf Convention Videos 2015&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.ansible.com/videos&quot;&gt;Ansible Video Resources - Including AnsibleFest Convention Videos&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;https://www.youtube.com/user/SaltStack&quot;&gt;SaltStack Video Resources&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;VMware Resources&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.vmworld.com/community/sessions/&quot;&gt;VMWorld Convention Session Playback&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://labs.hol.vmware.com&quot;&gt;VMWare Hands-On-Labs Training Labs&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;strong&gt;The Best of Cisco Live&lt;/strong&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;^(&lt;em&gt;Cisco Live is Cisco’s annual Technology expo &amp;amp; training convention.&lt;/em&gt;)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;^(&lt;em&gt;All of these presentations are available for free here: http://www.ciscolive.com/online - Many with video presentations of the lectures.&lt;/em&gt;)&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2013/usa/pdf/BRKARC-3001.pdf&quot;&gt;BRKARC-3001 - Cisco Integrated Services Router G2 - Architectural Overview and Use Cases (2013)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-3001.pdf&quot;&gt;BRKARC-3001 - Cisco Integrated Services Router - Architectural Overview and Use Cases (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-2001.pdf&quot;&gt;BRKARC-2001 - Cisco ASR1000 Series Routers: System &amp;amp; Solution Architectures (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKCRS-3147.pdf&quot;&gt;BRKCRS-3147 - Advanced Troubleshooting of the ASR1K and ISR (IOS-XE) made easy (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-1009.pdf&quot;&gt;BRKARC-1009 - Cisco Catalyst 2960-X Series Switching Architecture (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-3438.pdf&quot;&gt;BRKARC-3438 - Cisco Catalyst 3850 and 3650 Series Switching Architecture (2016&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKCRS-3146.pdf&quot;&gt;BRKCRS-3146 - Troubleshooting Cisco Catalyst 3650 / 3850 Series Switches (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-3445.pdf&quot;&gt;BRKARC-3445 - Cisco Catalyst 4500E Switch Architecture (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2015/usa/pdf/BRKCRS-3142.pdf&quot;&gt;BRKCRS-3142 - Troubleshooting Cisco Catalyst 4500 Series Switches (2015)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKARC-3465.pdf&quot;&gt;BRKARC-3465 - Cisco Catalyst 6800 Switch Architectures (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2015/usa/pdf/BRKCRS-3143.pdf&quot;&gt;BRKCRS-3143 - Troubleshooting Cisco Catalyst 6500 / 6800 Series Switches (2015)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2015/usa/pdf/BRKARC-2222.pdf&quot;&gt;BRKARC-2222 - Cisco Nexus 9000 Architecture (2015)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKDCT-3101.pdf&quot;&gt;BRKDCT-3101 - Nexus 9000 (Standalone) Architecture Brief and Troubleshooting (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKCRS-1500.pdf&quot;&gt;BRKCRS-1500 - Wired LAN Deployment Using the Cisco Validated Design for Campus (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKCRS-2031.pdf&quot;&gt;BRKCRS-2031 - Enterprise Campus Design: Multilayer Architectures and Design Principles (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKCRS-2501.pdf&quot;&gt;BRKCRS-2501 - Campus QoS Design-Simplified (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.cisco.com/c/en/us/solutions/enterprise/design-zone-campus/index.html#~validate&quot;&gt;Cisco Design Zone: Cisco Validated Designs for Campus Networks&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://www.cisco.com/c/en/us/solutions/enterprise/design-zone-branch-wan/index.html#~designs&quot;&gt;Cisco Design Zone: Cisco Validated Designs for Branch Office Networks&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKDCT-2218.pdf&quot;&gt;BRKDCT-2218 - Data Center Design for the Midsize Enterprise (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2015/usa/pdf/BRKSAN-2449.pdf&quot;&gt;BRKSAN-2449 - Storage Area Network Extension Design and Operation (2015)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;&lt;a href=&quot;http://d2zmdbbm9feqrf.cloudfront.net/2016/usa/pdf/BRKSAN-2883.pdf&quot;&gt;BRKSAN-2883 - Advanced Storage Area Network Design (2016)&lt;/a&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Enjoy it! :)&lt;/p&gt;
+
+&lt;p&gt;Credits: &lt;a href=&quot;https://www.reddit.com/user/VA_Network_Nerd&quot;&gt;VA_Network_Need&lt;/a&gt; via &lt;a href=&quot;https://www.reddit.com/r/networking/comments/7iudp5/training_material_for_new_network_engineer/dr1gg83/&quot;&gt;reddit&lt;/a&gt;.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 11 Dec 2017 00:00:00 +0100</pubDate>
+        <link>https://costinstefan.eu/networking-training-materials/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/networking-training-materials/</guid>
+      </item>
+    
+      <item>
+        <title>Udemy offline</title>
+        <description>&lt;p&gt;Here’s another cool and helpful thing I just discovered that might help you stranger of the internet.&lt;/p&gt;
+
+&lt;p&gt;Recently I joined a class on Udemy.com, and because I have other tasks at the moment and can’t dedicate 100% to it, I wanted to download the videos so I started looking for ways how to do it.
+The &lt;a href=&quot;https://support.udemy.com/hc/en-us/articles/229231167-Can-I-Download-a-Course-to-my-Computer-&quot;&gt;official answer&lt;/a&gt; is that they don’t have anything against it, but it depends on the instructors. In my case the option to download the video was not present, plus that I wanted to automate the process and not download the videos one by one.&lt;/p&gt;
+
+&lt;p&gt;So, first I read about garbage solutions, like installing bluestacks to emulate an Android environment and then install the Udemy app, from where you can enable offline videos that will save them locally. This solution required too many steps and the end result would have been a bunch of files in different folders with a generic filename like video.mp4; again, not optimal.&lt;/p&gt;
+
+&lt;p&gt;So the winning solution comes from &lt;a href=&quot;https://github.com/rg3/youtube-dl&quot;&gt;youtube-dl&lt;/a&gt;. With it you can download videos from &lt;a href=&quot;http://rg3.github.io/youtube-dl/supportedsites.html&quot;&gt;many sources&lt;/a&gt;, including Udemy, of course. 
+Here’s the link on &lt;a href=&quot;https://gist.github.com/barbietunnie/8531d9c26cd1c0668e7278c7c4ba5853&quot;&gt;gist&lt;/a&gt; on how you should use it.
+Basically, you just need to provide it the url + your USER and PASS plus the CLASS NAME.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;youtube-dl -u USER -p PASS -o &quot;./%(playlist)s/%(chapter_number)s-%(chapter)s/%(autonumber)03d-%(title)s.%(ext)s&quot; https://www.udemy.com/CLASS-NAME/learn/v4/content
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;After it finishes you’ll find a new folder in your current directory, called “CLASS-NAME” and a new directory for each section. Happy studying! :)&lt;/p&gt;
+
+&lt;h5 id=&quot;disclaimer&quot;&gt;Disclaimer&lt;/h5&gt;
+&lt;p&gt;I’m not supporting piracy. This method is intended only for personal use. And it works only for the courses that you already paid. It will not work if you don’t have an Udemy account and access to the course.&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 05 Dec 2017 00:00:00 +0100</pubDate>
+        <link>https://costinstefan.eu/udemy-offline/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/udemy-offline/</guid>
+      </item>
+    
+      <item>
+        <title>Quagga</title>
+        <description>&lt;p&gt;After having some interviews where I’ve been asked about routing on linux solutions, I’ve decided to playaround with Quagga.
+As always, you can find all the info already on the internet. And in my case Brian Kletter had all the necessary info to setup the environment.
+Here’s the &lt;a href=&quot;https://www.brianlinkletter.com/build-custom-linux-router-image-unetlab-eve-ng-network-emulators/&quot;&gt;link&lt;/a&gt; on how to setup a linux server with quagga software. And &lt;a href=&quot;https://www.brianlinkletter.com/how-to-build-a-network-of-linux-routers-using-quagga/&quot;&gt;here&lt;/a&gt; the initial setup for quagga.&lt;/p&gt;
+
+&lt;p&gt;For this lab I’ve decided to get familiar with the syntax first and capabilities and then to test a quick ospf scenario.&lt;/p&gt;
+
+&lt;p&gt;After setting it up it looks like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;quagga# sh ip ospf interface ens3
+ens3 is up
+  ifindex 2, MTU 1500 bytes, BW 0 Kbit &amp;lt;UP,BROADCAST,RUNNING,MULTICAST&amp;gt;
+  Internet Address 192.168.1.254/24, Broadcast 192.168.1.255, Area 0.0.0.0
+  MTU mismatch detection:enabled
+  Router ID 192.168.1.254, Network Type POINTOPOINT, Cost: 10
+  Transmit Delay is 1 sec, State Point-To-Point, Priority 1
+  No designated router on this network
+  No backup designated router on this network
+  Multicast group memberships: OSPFAllRouters
+  Timer intervals configured, Hello 10s, Dead 40s, Wait 40s, Retransmit 5
+    Hello due in 5.011s
+  Neighbor Count is 1, Adjacent neighbor count is 1
+quagga# sh ip ospf nei
+
+    Neighbor ID Pri State           Dead Time Address         Interface
+   RXmtL RqstL DBsmL
+3.3.3.3           1 Full/DROther      37.318s 192.168.1.1     ens3:192.168.1.254
+       0     0     0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;quagga# sh ip ro
+Codes: K - kernel route, C - connected, S - static, R - RIP,
+       O - OSPF, I - IS-IS, B - BGP, P - PIM, A - Babel,
+       &amp;gt; - selected route, * - FIB route
+
+O&amp;gt;* 3.3.3.3/32 [110/11] via 192.168.1.1, ens3, 00:07:28
+O&amp;gt;* 10.10.23.0/24 [110/20] via 192.168.1.1, ens3, 00:07:28
+C&amp;gt;* 127.0.0.0/8 is directly connected, lo
+O   192.168.1.0/24 [110/10] is directly connected, ens3, 00:23:44
+C&amp;gt;* 192.168.1.0/24 is directly connected, ens3
+C&amp;gt;* 192.168.100.0/24 is directly connected, lo
+O&amp;gt;* 192.168.100.1/32 [110/10] is directly connected, lo, 00:01:19
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;R3#sh ip ro ospf
+...
+      192.168.100.0/32 is subnetted, 1 subnets
+O IA     192.168.100.1 [110/20] via 192.168.1.254, 00:00:42, Ethernet0/0
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Also, a really good tutorial can be found &lt;a href=&quot;https://openmaniak.com/quagga.php&quot;&gt;here&lt;/a&gt;. 
+As a final note I think that this is not that hard to configure if you have some basic unix knowledge, and I’m pleasantly surprised to see that ctrl+z has the same behaviour like on Cisco devices and it doesn’t stops the vtysh process, like a normal shell would do :)&lt;/p&gt;
+
+&lt;p&gt;Today is Romania’s National Day, so happy aniversary to all my Romanian folks wherever they may be now.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 01 Dec 2017 00:00:00 +0100</pubDate>
+        <link>https://costinstefan.eu/quagga/</link>
+        <guid isPermaLink="true">https://costinstefan.eu/quagga/</guid>
+      </item>
+    
+  </channel>
+</rss>
